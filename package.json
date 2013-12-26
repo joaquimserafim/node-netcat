@@ -1,0 +1,27 @@
+{
+  "name": "node-netcat",
+  "version": "0.0.1",
+  "description": "nc/netcat - arbitrary TCP and UDP connections and listens in node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joaquimserafim/node-netcat.git"
+  },
+  "keywords": [
+    "netcat",
+    "nc",
+    "tcp",
+    "udp"
+  ],
+  "author": "@joaquimserafim",
+  "license": "MIT",
+  "devDependencies": {
+    "tape": "~2.3.2"
+  },
+  "dependencies": {
+    "optimist": "~0.6.0"
+  }
+}
