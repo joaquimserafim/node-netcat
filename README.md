@@ -23,6 +23,8 @@
 			
 	server(port)
 	
+	client.send('data');
+	
 	events: on('ready', function ())
 			on('data', function (data))
 			on('error', function (err))
@@ -39,7 +41,7 @@
 	client.on('connected', function () {
 	  console.log('connected');
 	
-	  client.send('this is a test\n');
+	  client.send('this is a test');
 	});
 	
 	client.on('data', function (data) {
@@ -66,3 +68,6 @@
 	server.on('data', function (data) { console.log('server rx: ' + data); });
 	server.on('error', function (err) { console.log(err); });
 	server.on('close', function () { console.log('server closed'); });
+	
+	server.send('this is a test');
+	
