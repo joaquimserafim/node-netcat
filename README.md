@@ -6,9 +6,14 @@
 	**v0.0.1**
 	Intention to implement all that "nc" allows and to be used in Node.js,
 	for now can only open TCP connections and sending messages (Client), listen on arbitary TCP ports and response to the received messages (Server), and only deal with IPv4.
+	
+	
+	nc listener (-k -l cmdline) in Node.js will be represented by Necat.server.
 
 
 ##Netcat -> 
+
+####Client
 	
 	client(port, [host])
 	
@@ -21,7 +26,8 @@
 			on('error', function (err))
 			on('close', function ())
 			
-	##############################################
+			
+####Server (-k -l)
 			
 	server(port)
 	
@@ -36,9 +42,9 @@
 			on('error', function (err))
 			on('close', function ())
 
-##usage
+##Examples
 
-**Client:**
+####Client
 
 	var Netcat = require('../')();
 	
@@ -62,7 +68,7 @@
 	  console.log('close');
 	});
 
-**Server:**
+####Server
 
 	var Netcat = require('../')();
 	
