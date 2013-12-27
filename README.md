@@ -12,18 +12,24 @@
 	
 	client(port, [host])
 	
-	client.send('data');
+	client.send('data', [callback]);
+	
+	client.end([message])// can send a message and close the connection
 
-	events: on('connected', function ())
+	events: on('connect', function ())
 			on('data', function (data))
 			on('error', function (err))
-			on('disconnected', function ())
+			on('close', function ())
 			
 	##############################################
 			
 	server(port)
 	
-	client.send('data');
+	server.close() // must not exists connections
+	
+	send data to client:
+	1 - server.clients[client].end([message]) // send message and close connection
+	2 - server.clients[client].write([message], [callback])
 	
 	events: on('ready', function ())
 			on('data', function (data))
@@ -38,24 +44,22 @@
 	
 	var client = Netcat.client(5000);
 	
-	client.on('connected', function () {
-	  console.log('connected');
-	
+	client.on('connect', function () {
+	  console.log('connect');
 	  client.send('this is a test');
 	});
 	
 	client.on('data', function (data) {
 	  console.log(data.toString('ascii'));
-	
-	  client.close();
+	  client.end([message]);
 	});
 	
 	client.on('error', function (err) {
 	  console.log(err);
 	});
 	
-	client.on('disconnected', function () {
-	  console.log('disconnected');
+	client.on('close', function () {
+	  console.log('close');
 	});
 
 **Server:**
@@ -70,4 +74,9 @@
 	server.on('close', function () { console.log('server closed'); });
 	
 	server.send('this is a test');
+	
+	// send messages to clients
+	for (var client in server.clients) {
+      server.clients[client].end('received ' + data);
+    }
 	

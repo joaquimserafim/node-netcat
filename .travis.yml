@@ -3,3 +3,10 @@
    - "0.11"
    - "0.10"
    - "0.8"
+ branches:
+ only:
+  - master
+ notifications:
+  email:
+   - joaquim.serafim@gmail.com
+ script: npm test

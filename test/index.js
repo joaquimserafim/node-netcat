@@ -1,34 +1,43 @@
-var tape = require('tape');
+var test = require('tape');
 
 var Netcat = require('../')();
 
-var server = Netcat.server(5000);
 
-server.on('ready', function () { console.log('server ready'); });
-server.on('data', function (data) { console.log('server rx:' + data); });
-server.on('error', function (err) { console.log(err); });
-server.on('close', function () { console.log('server closed'); });
+test('server', function (t) {
+  t.plan(7);
+ 
+  var server = Netcat.server();
+  var client = Netcat.client();
 
+  server.init(4000);
 
-var client = Netcat.client(5000);
+  server.once('ready', function () { 
+    t.pass('server ready'); 
+    client.init(4000, 'localhost');
+  });
 
+  server.on('data', function (data) { 
+    t.equal(data.length > 0, true, 'receive data: ' + data);
 
-client.on('connected', function () {
-  console.log('connected');
+    for (var client in server.clients) {
+      server.clients[client].end('received ' + data);
+      t.pass('server send a message and end the connection');
+    }
 
-  client.send('this is a test\n');
-});
+    setTimeout(function () { server.close(); }, 1000);
+  });
 
-client.on('data', function (data) {
-  console.log(data.toString('ascii'));
+  server.once('error', function (err) { t.error(err !== null, err); });
 
-  client.close();
-});
+  server.once('close', function () { t.pass('server closed'); });
 
-client.on('error', function (err) {
-  console.log(err);
-});
+  // client
+  client.on('connect', function () { 
+    t.pass('client connected'); 
+    client.send('hello world', function () { t.pass('client send message'); });
+  });
 
-client.on('disconnected', function () {
-  console.log('disconnected');
+  client.on('data', function (data) {
+     t.equal(data.length > 0, true, 'receive data: ' + data);
+  });
 });
