@@ -15,13 +15,16 @@
 
 ####Client
 	
-	client(port, [host])
+	client(port, [host], [options])
+	
+	(ex.) options = {timeout: 60000}
+	
 	
 	client.send('data', [callback]);
 	
 	client.end([message])// can send a message and close the connection
 
-	events: on('connect', function ())
+	events: on('open', function ())
 			on('data', function (data))
 			on('error', function (err))
 			on('close', function ())
@@ -48,9 +51,11 @@
 
 	var Netcat = require('../')();
 	
-	var client = Netcat.client(5000);
+	var client = Netcat.client();
 	
-	client.on('connect', function () {
+	client.init(5000);
+	
+	client.on('open', function () {
 	  console.log('connect');
 	  client.send('this is a test');
 	});
@@ -72,7 +77,9 @@
 
 	var Netcat = require('../')();
 	
-	var server = Netcat.server(5000);
+	var server = Netcat.server();
+	
+	server.init(5000);
 	
 	server.on('ready', function () { console.log('server ready'); });
 	server.on('data', function (data) { console.log('server rx: ' + data); });

@@ -4,7 +4,7 @@
   "description": "nc/netcat - arbitrary TCP and UDP connections and listens in node.js",
   "main": "index.js",
   "scripts": {
-    "test": "tape test"
+    "test": "tape test/index.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,7 @@
   "devDependencies": {
     "tape": "~2.3.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "underscore": "~1.5.2"
+  }
 }

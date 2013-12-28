@@ -12,8 +12,9 @@ test('server', function (t) {
   server.init(4000);
 
   server.once('ready', function () { 
-    t.pass('server ready'); 
-    client.init(4000, 'localhost');
+    t.pass('server ready');
+
+    client.init(4000);
   });
 
   server.on('data', function (data) { 
@@ -32,7 +33,7 @@ test('server', function (t) {
   server.once('close', function () { t.pass('server closed'); });
 
   // client
-  client.on('connect', function () { 
+  client.on('open', function () { 
     t.pass('client connected'); 
     client.send('hello world', function () { t.pass('client send message'); });
   });
