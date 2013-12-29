@@ -15,7 +15,7 @@
 
 ####Client
 	
-	client(port, [host], [options])
+	client.init(port, [host], [options])
 	
 	(ex.) options = {timeout: 60000}
 	
@@ -32,7 +32,7 @@
 			
 ####Server (-k -l)
 			
-	server(port)
+	server.init(port)
 	
 	server.close() // must not exists connections
 	
@@ -44,6 +44,10 @@
 			on('data', function (data))
 			on('error', function (err))
 			on('close', function ())
+			
+####PortScan (-z [port_start-port_end])
+	
+	scan.run(host, [port_start-port_end], cb)
 
 ##Examples
 
@@ -92,4 +96,14 @@
 	for (var client in server.clients) {
       server.clients[client].end('received ' + data);
     }
+
+
+####PortScan
+
+	var Netcat = require('../')();
+
+	var scan = Netcat.portscan();
 	
+	scan.run('google.com', '80-81', function (err, res) {
+		console.log(err, res);	
+	});

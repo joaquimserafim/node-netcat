@@ -3,7 +3,7 @@ var test = require('tape');
 var Netcat = require('../')();
 
 
-test('server', function (t) {
+test('server & client', function (t) {
   t.plan(7);
  
   var server = Netcat.server();
@@ -40,5 +40,18 @@ test('server', function (t) {
 
   client.on('data', function (data) {
      t.equal(data.length > 0, true, 'receive data: ' + data);
+  });
+});
+
+
+test('portscan', function (t) {
+  t.plan(2);// testing one with success and another with error
+
+  var scan = Netcat.portscan();
+
+  scan.run('google.com', '80-81', function (err, res) {
+    if (err) return t.ok(err, err);
+
+    t.ok(res, res);
   });
 });
