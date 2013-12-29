@@ -2,13 +2,23 @@
 	Arbitrary TCP and UDP connections and listens to be used in Node.js
 
 
-##description
+###Description
 	**v0.0.1**
 	Intention to implement all that "nc" allows and to be used in Node.js,
-	for now can only open TCP connections and sending messages (Client), listen on arbitary TCP ports and response to the received messages (Server), and only deal with IPv4.
+		. open TCP connections and sending messages (Client)
+		. listen on arbitary TCP ports and response to the received messages (Server)
+		. only deal with IPv4 and TCP
+		. portscan
 	
 	
-	nc listener (-k -l cmdline) in Node.js will be represented by Necat.server.
+	nc listener (-k -l cmdline)      -> Necat.server
+	nc host port                     -> Netcat.client
+	nc -z host port_start[-port_end] -> Netcat.portscan
+
+
+####Installation
+
+	npm install (--save) node-netcat
 
 
 ##Netcat -> 
@@ -53,7 +63,7 @@
 
 ####Client
 
-	var Netcat = require('../')();
+	var Netcat = require('node-netcat')();
 	
 	var client = Netcat.client();
 	
@@ -79,7 +89,7 @@
 
 ####Server
 
-	var Netcat = require('../')();
+	var Netcat = require('node-netcat')();
 	
 	var server = Netcat.server();
 	
@@ -100,7 +110,7 @@
 
 ####PortScan
 
-	var Netcat = require('../')();
+	var Netcat = require('node-netcat')();
 
 	var scan = Netcat.portscan();
 	
