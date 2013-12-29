@@ -2,8 +2,11 @@
 	Arbitrary TCP and UDP connections and listens to be used in Node.js
 
 
+<a href="https://nodei.co/npm/node-netcat/"><img src="https://nodei.co/npm/node-netcat.png"></a>
+
+
 ###Description
-	**v0.0.1**
+	**v0.0.2**
 	Intention to implement all that "nc" allows and to be used in Node.js,
 		. open TCP connections and sending messages (Client)
 		. listen on arbitary TCP ports and response to the received messages (Server)
