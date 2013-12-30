@@ -14,7 +14,8 @@
     "netcat",
     "nc",
     "tcp",
-    "udp"
+    "udp",
+    "portscan"
   ],
   "author": "@joaquimserafim",
   "license": "MIT",

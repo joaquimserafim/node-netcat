@@ -4,7 +4,7 @@ var Netcat = require('../')();
 
 
 test('server & client', function (t) {
-  t.plan(7);
+  t.plan(10);
  
   var server = Netcat.server();
   var client = Netcat.client();
@@ -12,34 +12,45 @@ test('server & client', function (t) {
   server.init(4000);
 
   server.once('ready', function () { 
-    t.pass('server ready');
+    t.pass('server, ready');
 
     client.init(4000);
   });
 
   server.on('data', function (data) { 
-    t.equal(data.length > 0, true, 'receive data: ' + data);
+    t.equal(data.length > 0, true, 'server, receive data: ' + data);
 
-    for (var client in server.clients) {
-      server.clients[client].end('received ' + data);
-      t.pass('server send a message and end the connection');
+    var clients = server.getClients();
+    t.ok(clients, 'server, exists ' + clients.length + ' client active');
+
+    for (var client in clients) {
+      server.send(clients[client], 'received ' + data, true, function () {
+        t.pass('server send ' + data.toString() + ' to client ' + clients[client]);
+      });
     }
 
     setTimeout(function () { server.close(); }, 1000);
   });
 
+  server.on('client', function (client) { t.ok(client, 'server, new client ' + client); });
+
   server.once('error', function (err) { t.error(err !== null, err); });
 
-  server.once('close', function () { t.pass('server closed'); });
+  server.once('close', function () { t.pass('server, closed'); });
+
 
   // client
   client.on('open', function () { 
-    t.pass('client connected'); 
+    t.pass('client, connected'); 
     client.send('hello world', function () { t.pass('client send message'); });
   });
 
   client.on('data', function (data) {
-     t.equal(data.length > 0, true, 'receive data: ' + data);
+     t.equal(data.length > 0, true, 'client, receive data: ' + data);
+  });
+
+  client.on('close', function () {
+    t.pass('client, closed');
   });
 });
 
