@@ -133,7 +133,7 @@
       server.send(clients[client], 'received ' + data, true);
     }
 
-	// or a normal message
+	// or a normal message	
 	server.send(client, 'message');
 	
 
