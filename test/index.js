@@ -6,10 +6,8 @@ var Netcat = require('../');
 test('server & client', function (t) {
   t.plan(10);
  
-  var server = Netcat.server();
+  var server = Netcat.server(4000);
   var client = Netcat.client();
-
-  server.init(4000);
 
   server.once('ready', function () { 
     t.pass('server, ready');
@@ -37,6 +35,8 @@ test('server & client', function (t) {
   server.once('error', function (err) { t.error(err !== null, err); });
 
   server.once('close', function () { t.pass('server, closed'); });
+
+  server.listen();
 
 
   // client

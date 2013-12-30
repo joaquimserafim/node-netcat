@@ -31,6 +31,8 @@
 ##Netcat -> 
 
 ####Client
+
+	var client = new Netcat.client()
 	
 	client.init(port, [host], [options])
 	
@@ -52,8 +54,10 @@
 			
 			
 ####Server (-k -l)
+
+	var server = new Netcat.server(port);
 			
-	server.init(port)// init server
+	server.listen()// init server
 	
 	server.close()// close server but must not exists active clients
 	
@@ -117,15 +121,16 @@
 
 	var Netcat = require('node-netcat');
 	
-	var server = Netcat.server();
+	var server = Netcat.server(5000);
 	
-	server.init(5000);
 	
 	server.on('ready', function () { console.log('server ready'); });
 	server.on('data', function (data) { console.log('server rx: ' + data); });
 	server.on('client', function (client) { console.log('new client', client); });
 	server.on('error', function (err) { console.log(err); });
 	server.on('close', function () { console.log('server closed'); });
+
+	server.listen();// start to listening
 		
 	// get active clients
 	var clients = server.getClients();
