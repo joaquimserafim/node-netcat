@@ -15,8 +15,8 @@ test('server & client', function (t) {
     client.init(4000);
   });
 
-  server.on('data', function (data) { 
-    t.equal(data.length > 0, true, 'server, receive data: ' + data);
+  server.on('data', function (client, data) { 
+    t.equal(data.length > 0, true, 'server, receive data: ' + data + ' from client ' + client);
 
     var clients = server.getClients();
     t.ok(clients, 'server, exists ' + clients.length + ' client active');

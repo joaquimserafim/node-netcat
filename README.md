@@ -78,7 +78,7 @@
 	events: 
 	
 		on('ready', function ())// server it's ready
-		on('data', function (data))
+		on('data', function (client, data))
 		on('client', function (client))// new client, client var is the "address:port"
 		on('error', function (err))
 		on('close', function ())// closes the server
@@ -125,7 +125,7 @@
 	
 	
 	server.on('ready', function () { console.log('server ready'); });
-	server.on('data', function (data) { console.log('server rx: ' + data); });
+	server.on('data', function (client data) { console.log('server rx: ' + data + ' from ' + client); });
 	server.on('client', function (client) { console.log('new client', client); });
 	server.on('error', function (err) { console.log(err); });
 	server.on('close', function () { console.log('server closed'); });
