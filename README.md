@@ -7,7 +7,9 @@
 
 ###Description	
 	
-	Trying to implement all that "nc" allows to be used in Node.js, this is a good module to implement simple server/client testing stuff or even to create simple tcp servers and clients.
+	Trying to implement all that "nc" allows to be used in Node.js, this is a good 
+	module to implement simple server/client testing stuff or even to create simple
+	tcp servers and clients.
 		
 	v1.0.0
 		. open TCP connections and sending messages (client)
