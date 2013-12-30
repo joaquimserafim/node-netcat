@@ -11,7 +11,7 @@
 	module to implement simple server/client testing stuff or even to create simple
 	tcp servers and clients.
 		
-	v1.0.0
+	v1.0.2
 		. open TCP connections and sending messages (client)
 		. listen on arbitary TCP ports and response to the received messages (server)
 		. PortScan (portscan)
@@ -36,7 +36,9 @@
 	
 	client.init(port, [host], [options])
 	
-	options = {timeout: 60000} // define a connection timeout
+	options = {timeout: 60000, // define a connection timeout
+	           encoding: 'ascii'// ascii(default), utf8, base64
+	          }
 	
 	
 	send data:
@@ -55,7 +57,9 @@
 			
 ####Server (-k -l)
 
-	var server = new Netcat.server(port);
+	var server = new Netcat.server(port, [encoding]);
+	
+	// encoding: ascii (default), utf8, base64
 			
 	server.listen()// init server
 	
@@ -125,7 +129,7 @@
 	
 	
 	server.on('ready', function () { console.log('server ready'); });
-	server.on('data', function (client data) { console.log('server rx: ' + data + ' from ' + client); });
+	server.on('data', function (client, data) { console.log('server rx: ' + data + ' from ' + client); });
 	server.on('client', function (client) { console.log('new client', client); });
 	server.on('error', function (err) { console.log(err); });
 	server.on('close', function () { console.log('server closed'); });

@@ -15,7 +15,7 @@ test('server & client', function (t) {
     client.init(4000);
   });
 
-  server.on('data', function (client, data) { 
+  server.on('data', function (client, data) {
     t.equal(data.length > 0, true, 'server, receive data: ' + data + ' from client ' + client);
 
     var clients = server.getClients();
@@ -23,7 +23,7 @@ test('server & client', function (t) {
 
     for (var client in clients) {
       server.send(clients[client], 'received ' + data, true, function () {
-        t.pass('server send ' + data.toString() + ' to client ' + clients[client]);
+        t.pass('server send ' + data + ' to client ' + clients[client]);
       });
     }
 
