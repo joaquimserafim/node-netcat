@@ -1,6 +1,6 @@
 var test = require('tape');
 
-var Netcat = require('../')();
+var Netcat = require('../');
 
 
 test('server & client', function (t) {

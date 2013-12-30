@@ -89,7 +89,7 @@
 
 ####Client
 
-	var Netcat = require('node-netcat')();
+	var Netcat = require('node-netcat');
 	
 	var client = Netcat.client();
 	
@@ -115,7 +115,7 @@
 
 ####Server
 
-	var Netcat = require('node-netcat')();
+	var Netcat = require('node-netcat');
 	
 	var server = Netcat.server();
 	
@@ -142,7 +142,7 @@
 
 ####PortScan
 
-	var Netcat = require('node-netcat')();
+	var Netcat = require('node-netcat');
 
 	var scan = Netcat.portscan();
 	
@@ -156,7 +156,7 @@
 
 	
 
-###### The MIT License (MIT)
+### The MIT License (MIT)
 
 **Copyright (c) 2013 [Joaquim Serafim](http://joaquimserafim.pt)**
 
