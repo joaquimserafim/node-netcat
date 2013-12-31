@@ -1,6 +1,6 @@
 {
   "name": "node-netcat",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "nc/netcat - arbitrary TCP and UDP connections and listens in node.js",
   "main": "index.js",
   "scripts": {

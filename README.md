@@ -11,7 +11,7 @@
 	module to implement simple server/client testing stuff or even to create simple
 	tcp servers and clients.
 		
-	v1.0.2
+	v1.0.3
 		. open TCP connections and sending messages (client)
 		. listen on arbitary TCP ports and response to the received messages (server)
 		. PortScan (portscan)
@@ -105,7 +105,7 @@
 	
 	client.on('open', function () {
 	  console.log('connect');
-	  client.send('this is a test');
+	  client.send('this is a test' + '\n');
 	});
 	
 	client.on('data', function (data) {

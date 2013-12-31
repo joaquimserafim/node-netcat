@@ -15,3 +15,8 @@
 
 * Server - implement encoding
 * Client - implement encoding
+
+
+2013.12.31, Version 1.0.3
+
+* Server - method 'send', when a client close connection and the server is write to socket at the moment throws a exception.
