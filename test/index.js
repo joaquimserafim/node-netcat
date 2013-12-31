@@ -4,7 +4,7 @@ var Netcat = require('../');
 
 
 test('server & client', function (t) {
-  t.plan(10);
+  t.plan(11);
  
   var server = Netcat.server(4000);
   var client = Netcat.client();
@@ -30,7 +30,13 @@ test('server & client', function (t) {
     setTimeout(function () { server.close(); }, 1000);
   });
 
-  server.on('client', function (client) { t.ok(client, 'server, new client ' + client); });
+  server.on('client_on', function (client) { 
+    t.ok(client, 'server, client connect ' + client); 
+  });
+
+  server.on('client_off', function (client) { 
+    t.ok(client, 'server, client disconnet ' + client); 
+  });
 
   server.once('error', function (err) { t.error(err !== null, err); });
 

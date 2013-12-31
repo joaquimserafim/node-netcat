@@ -11,7 +11,7 @@
 	module to implement simple server/client testing stuff or even to create simple
 	tcp servers and clients.
 		
-	v1.0.3
+	v1.0.4
 		. open TCP connections and sending messages (client)
 		. listen on arbitary TCP ports and response to the received messages (server)
 		. PortScan (portscan)
@@ -83,7 +83,8 @@
 	
 		on('ready', function ())// server it's ready
 		on('data', function (client, data))
-		on('client', function (client))// new client, client var is the "address:port"
+		on('client_on', function (client))// client connect
+		on('client_off', function (client))// client disconnect
 		on('error', function (err))
 		on('close', function ())// closes the server
 			

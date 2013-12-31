@@ -20,3 +20,8 @@
 2013.12.31, Version 1.0.3
 
 * Server - method 'send', when a client close connection and the server is write to socket at the moment throws a exception.
+
+
+2013.12.31, Version 1.0.4
+
+* Server - add new event "client_off" fires when a client disconnet, change event "client" to "client_on"
