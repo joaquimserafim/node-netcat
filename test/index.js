@@ -7,12 +7,12 @@ test('server & client', function (t) {
   t.plan(11);
  
   var server = Netcat.server(4000);
-  var client = Netcat.client();
+  var client = Netcat.client(4000);
 
   server.once('ready', function () { 
     t.pass('server, ready');
 
-    client.init(4000);
+    client.start();
   });
 
   server.on('data', function (client, data) {

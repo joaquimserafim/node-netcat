@@ -11,7 +11,7 @@
 	module to implement simple server/client testing stuff or even to create simple
 	tcp servers and clients.
 		
-	v1.0.4
+	v1.0.5
 		. open TCP connections and sending messages (client)
 		. listen on arbitary TCP ports and response to the received messages (server)
 		. PortScan (portscan)
@@ -32,13 +32,15 @@
 
 ####Client
 
-	var client = new Netcat.client()
+	var client = new Netcat.client(port, host, [options])
 	
-	client.init(port, [host], [options])
-	
-	options = {timeout: 60000, // define a connection timeout
-	           encoding: 'ascii'// ascii(default), utf8, base64
-	          }
+	options = {
+		timeout: 60000, // define a connection timeout
+	  encoding: 'ascii'// ascii(default), utf8, base64
+	 }
+
+	// client init connection
+	 client.start()
 	
 	
 	send data:
@@ -57,9 +59,12 @@
 			
 ####Server (-k -l)
 
-	var server = new Netcat.server(port, [encoding]);
+	var server = new Netcat.server(port, [options]);
 	
-	// encoding: ascii (default), utf8, base64
+	options = {
+		timeout: 60000, // define a connection timeout in miliseconds, default to 60 seconds
+	  encoding: 'ascii'// ascii(default), utf8, base64
+	 }
 			
 	server.listen()// init server
 	
@@ -100,9 +105,7 @@
 
 	var Netcat = require('node-netcat');
 	
-	var client = Netcat.client();
-	
-	client.init(5000);
+	var client = Netcat.client(5000, 'localhost');
 	
 	client.on('open', function () {
 	  console.log('connect');
@@ -122,6 +125,8 @@
 	  console.log('close');
 	});
 
+	client.start();
+
 ####Server
 
 	var Netcat = require('node-netcat');
@@ -131,7 +136,8 @@
 	
 	server.on('ready', function () { console.log('server ready'); });
 	server.on('data', function (client, data) { console.log('server rx: ' + data + ' from ' + client); });
-	server.on('client', function (client) { console.log('new client', client); });
+	server.on('client_on', function (client) { console.log('client on ', client); });
+	server.on('client_of', function (client) { console.log('client off ', client); });
 	server.on('error', function (err) { console.log(err); });
 	server.on('close', function () { console.log('server closed'); });
 

@@ -25,3 +25,9 @@
 2013.12.31, Version 1.0.4
 
 * Server - add new event "client_off" fires when a client disconnet, change event "client" to "client_on"
+
+
+2014.01.01, Version 1.0.5
+
+* Server - the object initialization '(port, encoding)' now use the parameter options (encoding, socket timeout) '(port, options={encoding, timeout})'
+* Client - move the configuration params from method to the constructor class, change the method name 'init' to 'start'
