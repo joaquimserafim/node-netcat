@@ -31,3 +31,9 @@
 
 * Server - the object initialization '(port, encoding)' now use the parameter options (encoding, socket timeout) '(port, options={encoding, timeout})'
 * Client - move the configuration params from method to the constructor class, change the method name 'init' to 'start'
+
+2014.01.02, Version 1.1.5
+
+* Server/Client - to suport receive the original Buffer objects, now 'options' parameter have the new properties 'read_encoding' (default to buffer) and 'write_encoding' (default to ascii)
+* Client - method 'end' was removed, 'send' suports close the connection "send(message_to_send, [close_connection], [callback])", close_connection default to false
+* PortScan - change to suport the new features from Client 

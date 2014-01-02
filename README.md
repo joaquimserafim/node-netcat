@@ -11,7 +11,7 @@
 	module to implement simple server/client testing stuff or even to create simple
 	tcp servers and clients.
 		
-	v1.0.5
+	v1.1.5
 		. open TCP connections and sending messages (client)
 		. listen on arbitary TCP ports and response to the received messages (server)
 		. PortScan (portscan)
@@ -35,8 +35,12 @@
 	var client = new Netcat.client(port, host, [options])
 	
 	options = {
-		timeout: 60000, // define a connection timeout
-	  encoding: 'ascii'// ascii(default), utf8, base64
+	 // define a connection timeout
+		timeout: 60000,
+	 // buffer(default, to receive the original Buffer objects), ascii, hex,utf8, base64
+	  read_encoding: 'buffer',
+	 // ascii(default), base64, utf8, hex
+	 write_encoding: 'ascii'
 	 }
 
 	// client init connection
@@ -45,8 +49,9 @@
 	
 	send data:
 	
-	1 - client.send('data', [callback]);
-	2- client.end([message])// send a message and close the connection
+	client.send('message', [close_connection], [callback]);
+	
+	close_connection: false is the default value
 
 
 	events:
@@ -62,8 +67,12 @@
 	var server = new Netcat.server(port, [options]);
 	
 	options = {
-		timeout: 60000, // define a connection timeout in miliseconds, default to 60 seconds
-	  encoding: 'ascii'// ascii(default), utf8, base64
+	 // define a connection timeout
+		timeout: 60000,
+	 // buffer(default, to receive the original Buffer objects), ascii, hex,utf8, base64
+	  read_encoding: 'buffer',
+	 // ascii(default), base64, utf8, hex
+	 write_encoding: 'ascii'
 	 }
 			
 	server.listen()// init server
@@ -73,9 +82,9 @@
 	
 	send data to a client:
 		
-	server.send(client, message_to_send, [close_connection], [callback]);
+	server.send(client, message, [close_connection], [callback]);
 	
-	close_connection: bool, this is a way to close the connection with a client.
+	close_connection: false is the default value, this is a way to close the connection with a client.
 	callback: parameter will be executed when the data is finally written out - this may not be immediately.
 	
 	
@@ -114,7 +123,7 @@
 	
 	client.on('data', function (data) {
 	  console.log(data.toString('ascii'));
-	  client.end([message]);
+	  client.send('Goodbye!!!', true);
 	});
 	
 	client.on('error', function (err) {
