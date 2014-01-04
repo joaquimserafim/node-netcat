@@ -1,11 +1,13 @@
 #node-netcat
-	Arbitrary TCP and UDP connections and listens to be used in Node.js
 
 
 <a href="https://nodei.co/npm/node-netcat/"><img src="https://nodei.co/npm/node-netcat.png"></a>
 
+[![Build Status](https://travis-ci.org/joaquimserafim/node-netcat.png?branch=master)](https://travis-ci.org/joaquimserafim/node-netcat)
 
-###Description	
+###Description
+
+  Arbitrary TCP and UDP connections and listens to be used in Node.js
 	
 	Trying to implement all that "nc" allows to be used in Node.js, this is a good 
 	module to implement simple server/client testing stuff or even to create simple
