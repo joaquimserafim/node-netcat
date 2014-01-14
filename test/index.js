@@ -67,8 +67,43 @@ test('portscan', function (t) {
   var scan = Netcat.portscan();
 
   scan.run('google.com', '80-81', function (err, res) {
+    // will fail in port 81
     if (err) return t.ok(err, err);
 
     t.ok(res, res);
   });
 });
+
+
+test('upd', function (t) {
+  t.plan(5);
+
+  var server = Netcat.udpServer(5000, '127.0.0.1');
+  var client = Netcat.udpClient;
+
+  server.on('data', function (msg, client, protocol) {
+    t.ok(msg, 'server, "' + msg + '", ' + client + ', ' + protocol);
+    server.close();
+  });
+
+  server.on('ready', function () {
+    t.pass('server, ready');
+
+    setTimeout(function () {
+      client('Hello World UDP!!!!', 5000, '127.0.0.1', function (err, bytes) {
+        if (err) return t.error(err !== null, err);
+        t.ok(bytes, 'client, msg length ' + bytes);
+      });
+    }, 2000);
+  });
+  
+  server.once('error', function (err) { t.error(err !== null, err); });
+
+  server.once('close', function () { t.pass('server, closed'); });
+
+  server.bind(function () { t.pass('server, bind'); });
+});
+
+
+
+
