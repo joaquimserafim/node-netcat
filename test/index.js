@@ -76,7 +76,7 @@ test('portscan', function (t) {
 
 
 test('upd', function (t) {
-  t.plan(5);
+  t.plan(4);
 
   var server = Netcat.udpServer(5000, '127.0.0.1');
   var client = Netcat.udpClient;
@@ -101,7 +101,7 @@ test('upd', function (t) {
 
   server.once('close', function () { t.pass('server, closed'); });
 
-  server.bind(function () { t.pass('server, bind'); });
+  server.bind();
 });
 
 
