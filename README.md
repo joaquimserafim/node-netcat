@@ -13,11 +13,11 @@
 	module to implement simple server/client testing stuff or even to create simple
 	tcp servers and clients.
 		
-	v1.1.5
-		. open TCP connections and sending messages (client)
-		. listen on arbitary TCP ports and response to the received messages (server)
+	v1.2.5
+		. open TCP/UDP connections and sending messages (client)
+		. listen on arbitary TCP/UDP ports and response to the received messages (server)
 		. PortScan (portscan)
-		. only deal with IPv4 and TCP
+		. TCP only deal with IPV4
 	
 	
 	nc listener (-k -l cmdline)      -> Necat.server
@@ -34,7 +34,7 @@
 
 ####Client
 
-	var client = new Netcat.client(port, host, [options])
+	new Netcat.client(port, host, [options])
 	
 	options = {
 	 // define a connection timeout
@@ -66,7 +66,7 @@
 			
 ####Server (-k -l)
 
-	var server = new Netcat.server(port, [options]);
+	new Netcat.server(port, [options])
 	
 	options = {
 	 // define a connection timeout
@@ -103,12 +103,54 @@
 		on('client_off', function (client))// client disconnect
 		on('error', function (err))
 		on('close', function ())// closes the server
-			
+		
+
+####UDP Client (-u)
+
+    Netcat.udpClient
+    
+    client(message*, port, address, callback)
+     
+    "message" not pass a Buffer!!!
+ 
+#####  *A Note about UDP datagram size
+
+> The maximum size of an IPv4/v6 datagram depends on the MTU (Maximum Transmission Unit) and on the Payload Length field size.
+> 
+> The Payload Length field is 16 bits wide, which means that a normal payload cannot be larger than 64K octets including internet header and data (65,507 bytes = 65,535 − 8 bytes UDP header − 20 bytes IP header); this is generally true for loopback interfaces, but such long datagrams are impractical for most hosts and networks.
+> 
+> The MTU is the largest size a given link layer technology can support for datagrams. For any link, IPv4 mandates a minimum MTU of 68 octets, while the recommended MTU for IPv4 is 576 (typically recommended as the MTU for dial-up type applications), whether they arrive whole or in fragments.
+> 
+> For IPv6, the minimum MTU is 1280 octets, however, the mandatory minimum fragment reassembly buffer size is 1500 octets. The value of 68 octets is very small, since most current link layer technologies have a minimum MTU of 1500 (like Ethernet).
+> 
+> Note that it's impossible to know in advance the MTU of each link through which a packet might travel, and that generally sending a datagram greater than the (receiver) MTU won't work (the packet gets silently dropped, without informing the source that the data did not reach its intended recipient). 
+
+
+####UDP Server (-u -k -l)
+
+    Netcat.udpServer(5000, '127.0.0.1')
+
+    methods:
+        close() 
+        bind() // binding to a port
+        
+
+
+    events: 
+	
+		on('ready', function ())
+		on('data', function (client, data, protocol family))
+		on('error', function (err))
+		on('close', function ())
+		
+					
 ####PortScan (-z [port_start-port_end])
 	
 	scan.run(host, ports*, cb)
 	
 	* a single port 80 or between various ports 22-80
+	
+
 
 ##Examples
 
@@ -166,6 +208,40 @@
 	server.send(client, 'message');
 	
 
+####UDP Client
+
+    var client = Netcat.udpClient;
+    
+    client('Hello World UDP!!!!', 5000, '127.0.0.1', function (err, bytes) {
+      if (err) throw err;\
+      
+      console.log(bytes);
+    });
+
+
+	
+####UDP Server
+
+    var server = Netcat.udpServer(5000, '127.0.0.1');
+    
+    server.on('data', function (msg, client, protocol) {
+      console.log('rx: ' + msg + ', from ' + client);
+    });
+
+    server.on('ready', function () { console.log('ready'); });
+      
+    server.once('error', function (err) { console.log(err); });
+    
+    server.once('close', function () { console.log('close'); });
+    
+    server.bind();
+    
+    
+    setTimeout(function () {
+      server.close();
+    }, 30000);
+
+
 
 ####PortScan
 
@@ -176,32 +252,3 @@
 	scan.run('google.com', '80-81', function (err, res) {
 		console.log(err, res);	
 	});
-	
-	
-	
-
-
-	
-
-### The MIT License (MIT)
-
-**Copyright (c) 2013 [Joaquim Serafim](http://joaquimserafim.pt)**
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-

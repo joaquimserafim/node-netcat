@@ -62,7 +62,7 @@ test('server & client', function (t) {
 
 
 test('portscan', function (t) {
-  t.plan(2);// testing one with success and another with error
+  t.plan(4);// testing one with success and another with error
 
   var scan = Netcat.portscan();
 
@@ -76,25 +76,23 @@ test('portscan', function (t) {
 
 
 test('upd', function (t) {
-  t.plan(4);
+  t.plan(5);
 
   var server = Netcat.udpServer(5000, '127.0.0.1');
-  var client = Netcat.udpClient;
+  var client = Netcat.udpClient(5000, '127.0.0.1');
 
   server.on('data', function (msg, client, protocol) {
-    t.ok(msg, 'server, "' + msg + '", ' + client + ', ' + protocol);
-    server.close();
+    t.ok(msg, 'server, "' + msg + '", ' + JSON.stringify(client) + ', ' + protocol);
+    setTimeout(function () { server.close(); }, 1200);
   });
 
   server.on('ready', function () {
     t.pass('server, ready');
 
     setTimeout(function () {
-      client('Hello World UDP!!!!', 5000, '127.0.0.1', function (err, bytes) {
-        if (err) return t.error(err !== null, err);
-        t.ok(bytes, 'client, msg length ' + bytes);
-      });
-    }, 2000);
+      client.send('Hello World UDP!!!!');
+      setTimeout(function () { client.close(); }, 1000);
+    }, 1000);
   });
   
   server.once('error', function (err) { t.error(err !== null, err); });
@@ -102,6 +100,13 @@ test('upd', function (t) {
   server.once('close', function () { t.pass('server, closed'); });
 
   server.bind();
+
+
+  client.on('open', function () { t.pass('client, open'); });
+
+  client.once('error', function (err) { t.error(err !== null, err); });
+
+  client.once('close', function () { t.pass('client, closed'); });
 });
 
 
