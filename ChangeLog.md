@@ -39,7 +39,7 @@
 * PortScan - change to suport the new features from Client 
 
 
-2014.01.15, Version 1.2.5
+2014.01.23, Version 1.2.5
 
-* Implemented UDP Protocol / Client - Server - PortScan
+* Implemented UDP Protocol / Update Client - Server - PortScan
 * License ISC

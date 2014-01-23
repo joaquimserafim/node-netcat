@@ -107,9 +107,28 @@
 
 ####UDP Client (-u)
 
-    Netcat.udpClient
+    Netcat.udpClient(port, host, [options])
     
-    client(message*, port, address, callback)
+    options = {
+	 // define a connection timeout
+		timeout: 60000,
+	 // buffer(default, to receive the original Buffer objects), ascii, hex,utf8, base64
+	  read_encoding: 'buffer''
+	 }
+    
+    events:
+		on('open', function ())
+		on('message', function (message, {port, address}, protocol_family))
+		on('error', function (err))
+		on('close', function ())
+        
+        // protocol_family - ipv4 | ipv6
+
+    
+    methods:
+        close()
+        start() // init client
+        send('message')
      
     "message" not pass a Buffer!!!
  
@@ -128,16 +147,21 @@
 
 ####UDP Server (-u -k -l)
 
-    Netcat.udpServer(5000, '127.0.0.1')
+    Netcat.udpServer(port, host, [options])
+    
+    options = {
+	 // define a connection timeout
+		timeout: 60000,
+	 // buffer(default, to receive the original Buffer objects), ascii, hex,utf8, base64
+	  read_encoding: 'buffer''
+	 }
 
     methods:
-        close() 
+        close()
         bind() // binding to a port
-        
 
 
-    events: 
-	
+    events:
 		on('ready', function ())
 		on('data', function (client, data, protocol family))
 		on('error', function (err))
@@ -210,14 +234,15 @@
 
 ####UDP Client
 
-    var client = Netcat.udpClient;
+    var client = Netcat.udpClient(5000, '127.0.0.1');
     
-    client('Hello World UDP!!!!', 5000, '127.0.0.1', function (err, bytes) {
-      if (err) throw err;\
-      
-      console.log(bytes);
-    });
-
+    client.on('open', function () {  console.log('open'); });
+    
+    client.once('error', function (err) {  console.error('err'); });
+    
+    client.once('close', function () { console.log('client, closed'); });
+    
+    clien.send('Hello World');
 
 	
 ####UDP Server
