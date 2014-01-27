@@ -5,7 +5,7 @@
 
 [![Build Status](https://travis-ci.org/joaquimserafim/node-netcat.png?branch=master)](https://travis-ci.org/joaquimserafim/node-netcat)
 
-https://david-dm.org/joaquimserafim/node-netcat.png
+<img src="https://david-dm.org/joaquimserafim/lasync.png">
 
 ###Description
 
