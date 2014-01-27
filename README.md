@@ -5,6 +5,8 @@
 
 [![Build Status](https://travis-ci.org/joaquimserafim/node-netcat.png?branch=master)](https://travis-ci.org/joaquimserafim/node-netcat)
 
+https://david-dm.org/joaquimserafim/node-netcat.png
+
 ###Description
 
   Arbitrary TCP and UDP connections and listens to be used in Node.js
