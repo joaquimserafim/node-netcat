@@ -39,7 +39,12 @@
 * PortScan - change to suport the new features from Client 
 
 
-2014.01.23, Version 1.2.5
+2014.01.23, Version 1.3.5
 
 * Implemented UDP Protocol / Update Client - Server - PortScan
 * License ISC
+
+
+2014.01.29, Version 1.3.5
+
+* Add parameter "host" in Server lib

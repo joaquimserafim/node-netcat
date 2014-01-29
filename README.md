@@ -32,7 +32,7 @@
 	npm install (--save) node-netcat
 
 
-##Netcat -> 
+##Netcat -> API
 
 ####Client
 
@@ -68,7 +68,7 @@
 			
 ####Server (-k -l)
 
-	new Netcat.server(port, [options])
+	new Netcat.server(port, [host], [options])
 	
 	options = {
 	 // define a connection timeout
