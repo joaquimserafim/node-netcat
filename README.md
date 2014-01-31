@@ -1,7 +1,7 @@
 #node-netcat
 
 
-<a href="https://nodei.co/npm/node-netcat/"><img src="https://nodei.co/npm/node-netcat.png"></a>
+<a href="https://nodei.co/npm/node-netcat/"><img src="https://nodei.co/npm/node-netcat.png?downloads=true"></a>
 
 [![Build Status](https://travis-ci.org/joaquimserafim/node-netcat.png?branch=master)](https://travis-ci.org/joaquimserafim/node-netcat)
 
