@@ -15,7 +15,7 @@
 	module to implement simple server/client testing stuff or even to create simple
 	tcp servers and clients.
 		
-	v1.2.5
+	v1.4.5
 		. open TCP/UDP connections and sending messages (client)
 		. listen on arbitary TCP/UDP ports and response to the received messages (server)
 		. PortScan (portscan)
@@ -42,9 +42,7 @@
 	 // define a connection timeout
 		timeout: 60000,
 	 // buffer(default, to receive the original Buffer objects), ascii, hex,utf8, base64
-	  read_encoding: 'buffer',
-	 // ascii(default), base64, utf8, hex
-	 write_encoding: 'ascii'
+	  read_encoding: 'buffer'
 	 }
 
 	// client init connection
@@ -53,7 +51,7 @@
 	
 	send data:
 	
-	client.send('message', [close_connection], [callback]);
+	client.send('message - don't need pass as Buffer, [close_connection], [callback]);
 	
 	close_connection: false is the default value
 
@@ -74,9 +72,7 @@
 	 // define a connection timeout
 		timeout: 60000,
 	 // buffer(default, to receive the original Buffer objects), ascii, hex,utf8, base64
-	  read_encoding: 'buffer',
-	 // ascii(default), base64, utf8, hex
-	 write_encoding: 'ascii'
+	  read_encoding: 'buffer'
 	 }
 			
 	server.listen()// init server
@@ -85,11 +81,12 @@
 	
 	
 	send data to a client:
-		
-	server.send(client, message, [close_connection], [callback]);
+		server.send(client, ' don't need to pass as Buffer, [close_connection], [callback]);
 	
-	close_connection: false is the default value, this is a way to close the connection with a client.
-	callback: parameter will be executed when the data is finally written out - this may not be immediately.
+		close_connection: false is the default value, this is a way to close 
+			the connection with a client.
+		callback: parameter will be executed when the data is finally written 
+			out - this may not be immediately.
 	
 	
 	get clients:

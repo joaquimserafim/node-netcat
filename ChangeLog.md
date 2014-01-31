@@ -48,3 +48,8 @@
 2014.01.29, Version 1.3.5
 
 * Add parameter "host" in Server lib
+
+
+2014.01.31, Version 1.4.5
+
+* Client/Server - removed option 'write_encoding' now all writes are passed as Buffer.
