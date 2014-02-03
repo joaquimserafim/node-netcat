@@ -15,7 +15,7 @@
 	module to implement simple server/client testing stuff or even to create simple
 	tcp servers and clients.
 		
-	v1.4.5
+	v1.4
 		. open TCP/UDP connections and sending messages (client)
 		. listen on arbitary TCP/UDP ports and response to the received messages (server)
 		. PortScan (portscan)

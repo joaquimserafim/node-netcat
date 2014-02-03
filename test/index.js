@@ -4,10 +4,10 @@ var Netcat = require('../');
 
 
 test('server & client', function (t) {
-  t.plan(11);
+  t.plan(13);
  
   var server = Netcat.server(4000);
-  var client = Netcat.client(4000);
+  var client = Netcat.client(4000, {readEncoding: 'utf8'});
 
   server.once('ready', function () { 
     t.pass('server, ready');
@@ -16,14 +16,17 @@ test('server & client', function (t) {
   });
 
   server.on('data', function (client, data) {
-    t.equal(data.length > 0, true, 'server, receive data: ' + data + ' from client ' + client);
+    t.equal(data.length > 0, true, 'server, receive data: "' + data + '" from client ' + client);
+
+    // test Buffer
+    t.equal(Buffer.isBuffer(data), true, 'server, is configure to rx as Buffer');
 
     var clients = server.getClients();
     t.ok(clients, 'server, exists ' + clients.length + ' client active');
 
     for (var client in clients) {
-      server.send(clients[client], 'received ' + data, true, function () {
-        t.pass('server send ' + data + ' to client ' + clients[client]);
+      server.send(clients[client], data, true, function () {
+        t.pass('server, send "' + data + '" to client ' + clients[client]);
       });
     }
 
@@ -48,11 +51,15 @@ test('server & client', function (t) {
   // client
   client.on('open', function () { 
     t.pass('client, connected'); 
-    client.send('hello world', function () { t.pass('client send message'); });
+    setTimeout(function () {
+      client.send('Hello World', function () { t.pass('client, send message'); });
+    }, 1000);
   });
 
   client.on('data', function (data) {
-     t.equal(data.length > 0, true, 'client, receive data: ' + data);
+    t.equal(data.length > -1, true, 'client, receive data: ' + data);
+    // test encoding
+    t.equal(typeof data, 'string', 'client, is configure to rx as String ascii/utf8');
   });
 
   client.on('close', function () {

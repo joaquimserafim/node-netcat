@@ -53,3 +53,9 @@
 2014.01.31, Version 1.4.5
 
 * Client/Server - removed option 'write_encoding' now all writes are passed as Buffer.
+
+
+2014.02.03, Version 1.4.6
+
+* Client/Server - Fix bug in 'send' method when sending of a value as 'null'
+
