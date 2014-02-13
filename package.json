@@ -20,10 +20,11 @@
   "author": "@joaquimserafim",
   "license": "MIT",
   "devDependencies": {
-    "tape": "~2.3.2"
+    "tape": "~2.4.2"
   },
   "dependencies": {
-    "underscore": "~1.5.2",
-    "lasync": "~1.0.0"
+    "lasync": "~1.1.0",
+    "underscore": "~1.6.0",
+    "tiny-eventemitter": "~1.1.0"
   }
 }

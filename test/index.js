@@ -49,7 +49,7 @@ test('server & client', function (t) {
 
 
   // client
-  client.on('open', function () { 
+  client.once('open', function () { 
     t.pass('client, connected'); 
     setTimeout(function () {
       client.send('Hello World', function () { t.pass('client, send message'); });
@@ -62,7 +62,7 @@ test('server & client', function (t) {
     t.equal(typeof data, 'string', 'client, is configure to rx as String ascii/utf8');
   });
 
-  client.on('close', function () {
+  client.once('close', function () {
     t.pass('client, closed');
   });
 });
