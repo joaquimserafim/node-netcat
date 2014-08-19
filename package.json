@@ -1,6 +1,6 @@
 {
   "name": "node-netcat",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "nc/netcat - arbitrary TCP and UDP connections and listens in node.js",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "lasync": "~1.1.0",
-    "underscore": "~1.6.0",
-    "tiny-eventemitter": "~1.1.0"
+    "tiny-eventemitter": "^1.1.0",
+    "underscore": "~1.6.0"
   }
 }
