@@ -4,7 +4,10 @@
   "description": "nc/netcat - arbitrary TCP and UDP connections and listens in node.js",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/index.js"
+    "test": "tape test/index.js",
+    "jshint": "jshint -c .jshintrc --exclude-path .gitignore .",
+    "codestyle": "jscs -p google lib/ test/",
+    "coverage": "istanbul cover ./node_modules/tape/bin/tape test"
   },
   "repository": {
     "type": "git",
