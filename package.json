@@ -27,6 +27,6 @@
   },
   "dependencies": {
     "lasync": "~1.1.0",
-    "underscore": "~1.6.0"
+    "underscore": "^1.7.0"
   }
 }
