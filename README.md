@@ -1,110 +1,106 @@
-#node-netcat
+# node-netcat
 
 
 <a href="https://nodei.co/npm/node-netcat/"><img src="https://nodei.co/npm/node-netcat.png?downloads=true"></a>
 
-[![Build Status](https://travis-ci.org/joaquimserafim/node-netcat.png?branch=master)](https://travis-ci.org/joaquimserafim/node-netcat)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg?style=flat-square)](https://travis-ci.org/joaquimserafim/node-netcat)![Code Coverage 100%](https://img.shields.io/badge/code%20coverage-100%25-green.svg?style=flat-square)[![ISC License](https://img.shields.io/badge/license-ISC-blue.svg?style=flat-square)](https://github.com/joaquimserafim/node-netcat/blob/master/LICENSE)
 
-<img src="https://david-dm.org/joaquimserafim/lasync.png">
-
-###Description
+## Description
 
   Arbitrary TCP and UDP connections and listens to be used in Node.js
 	
-	Trying to implement all that "nc" allows to be used in Node.js, this is a good 
-	module to implement simple server/client testing stuff or even to create simple
-	tcp servers and clients.
+
+>This module try to implement all that "nc" allows to be used in Node.js, this is a good module to implement simple server/client testing stuff or even to create simple tcp servers and clients.
+
+
 		
-	v1.4
-		. open TCP/UDP connections and sending messages (client)
-		. listen on arbitary TCP/UDP ports and response to the received messages (server)
-		. PortScan (portscan)
-		. TCP only deal with IPV4
-	
-	
-	nc listener (-k -l cmdline)      -> Necat.server
-	nc host port                     -> Netcat.client
-	nc -z host port_start[-port_end] -> Netcat.portscan
+#### Current features:
+*	open TCP/UDP connections and sending messages (client)
+*	listen on arbitary TCP/UDP ports and response to the received messages (server)
+*	PortScan (portscan)
+*	TCP only deal with IPV4
+
+`var Netcat = require('node-netcat')`
+
+| nc | node-netcat|
+|----|------------|
+| nc listener (-k -l cmdline)   |    Necat.server        |
+| nc host port  |       Netcat.client     |
+|  nc -z host port_start[-port_end]  |     Netcat.portscan       |
 
 
-####Installation
 
-	npm install (--save) node-netcat
+### Installation
 
-
-##Netcat -> API
-
-####Client
-
-	new Netcat.client(port, host, [options])
-	
-	options = {
-	 // define a connection timeout
-		timeout: 60000,
-	 // buffer(default, to receive the original Buffer objects), ascii, hex,utf8, base64
-	  read_encoding: 'buffer'
-	 }
-
-	// client init connection
-	 client.start()
-	
-	
-	send data:
-	
-	client.send('message - don't need pass as Buffer, [close_connection], [callback]);
-	
-	close_connection: false is the default value
+	npm i --save node-netcat
 
 
-	events:
-	
-		on('open', function ())
-		on('data', function (data))
-		on('error', function (err))
-		on('close', function ())
+## Netcat -> API
+
+### Client
+
+`Netcat.client(port, host, [options])`
+
+*	**port** {int} required
+*	**host** {string} required
+*	**options**
+	*	**timeout** {int} define a connection timeout in miliseconds, default to 60000,
+	*	**read_encoding** {string} the read encoding, default to 'buffer', others values ascii, hex,utf8, base64
+
+#### start()
+client starts the connection
+
+#### send(message, [close_connection], [callback])
+send messages and can close the connection after send the message
+
+*	**message** {string} don't need to be a Buffer
+*	**close_connection** {boolean} default to false
+*	**callback** - {function} ?
+
+#### events
+*	**open** callback()
+*	**data** callback(data)
+*	**error** callback(err)
+*	**close** callback()
 			
 			
-####Server (-k -l)
+### Server (-k -l)
 
-	new Netcat.server(port, [host], [options])
-	
-	options = {
-	 // define a connection timeout
-		timeout: 60000,
-	 // buffer(default, to receive the original Buffer objects), ascii, hex,utf8, base64
-	  read_encoding: 'buffer'
-	 }
+`new Netcat.server(port, [host], [options])`
+
+*	**port** {int} required
+*	**host** {string} required
+*	**options**
+	*	**timeout** {int} define a connection timeout in miliseconds, default to 60000,
+	*	**read_encoding** {string} the read encoding, default to 'buffer', others values ascii, hex,utf8, base64
+
 			
-	server.listen()// init server
+#### listen()
+initialize the server
+
+#### close()
+close the server but must not exists active clients
 	
-	server.close()// close server but must not exists active clients
+#### send(client, message, [close_connection], [callback])
+send messages to a particular client and can close the connection after send the message
+
+*	**message** {string} don't need to be a Buffer
+*	**close_connection** {boolean} default to false
+*	**callback** - {function} ?	parameter will be executed when the data is finally written out, this may not be immediately
 	
-	
-	send data to a client:
-		server.send(client, ' don't need to pass as Buffer, [close_connection], [callback]);
-	
-		close_connection: false is the default value, this is a way to close 
-			the connection with a client.
-		callback: parameter will be executed when the data is finally written 
-			out - this may not be immediately.
-	
-	
-	get clients:
-	
-	server.getClients();// return an array
-	
-	
-	events: 
-	
-		on('ready', function ())// server it's ready
-		on('data', function (client, data))
-		on('client_on', function (client))// client connect
-		on('client_off', function (client))// client disconnect
-		on('error', function (err))
-		on('close', function ())// closes the server
+#### getClients()
+return an array with all active clients
+
+#### events
+*	**ready** callback() - server it's ready
+*	**data** callback(data)
+*	**client_on** callback(client)
+*	**client_off** callback(client)
+*	**error** callback(err)
+*	**close** callback()
 		
 
-####UDP Client (-u)
+### UDP Client (-u)
 
     Netcat.udpClient(port, host, [options])
     
@@ -144,7 +140,7 @@
 > Note that it's impossible to know in advance the MTU of each link through which a packet might travel, and that generally sending a datagram greater than the (receiver) MTU won't work (the packet gets silently dropped, without informing the source that the data did not reach its intended recipient). 
 
 
-####UDP Server (-u -k -l)
+### UDP Server (-u -k -l)
 
     Netcat.udpServer(port, host, [options])
     
@@ -167,7 +163,7 @@
 		on('close', function ())
 		
 					
-####PortScan (-z [port_start-port_end])
+### PortScan (-z [port_start-port_end])
 	
 	scan.run(host, ports*, cb)
 	
@@ -175,9 +171,9 @@
 	
 
 
-##Examples
+## Examples
 
-####Client
+### Client
 
 	var Netcat = require('node-netcat');
 	
@@ -203,7 +199,7 @@
 
 	client.start();
 
-####Server
+### Server
 
 	var Netcat = require('node-netcat');
 	
@@ -231,7 +227,7 @@
 	server.send(client, 'message');
 	
 
-####UDP Client
+### UDP Client
 
     var client = Netcat.udpClient(5000, '127.0.0.1');
     
@@ -244,7 +240,7 @@
     clien.send('Hello World');
 
 	
-####UDP Server
+### UDP Server
 
     var server = Netcat.udpServer(5000, '127.0.0.1');
     
@@ -267,7 +263,7 @@
 
 
 
-####PortScan
+### PortScan
 
 	var Netcat = require('node-netcat');
 
@@ -276,3 +272,33 @@
 	scan.run('google.com', '80-81', function (err, res) {
 		console.log(err, res);	
 	});
+
+
+## Development
+
+##### this projet has been set up with a precommit that forces you to follow a code style, no jshint issues and 100% of code coverage before commit
+
+to run test
+``` js
+npm test
+```
+
+to run jshint
+``` js
+npm run jshint
+```
+
+to run code style
+``` js
+npm run code-style
+```
+
+to run check code coverage
+``` js
+npm run check-coverage
+```
+
+to open the code coverage report
+``` js
+npm run open-coverage
+```

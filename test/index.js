@@ -14,24 +14,75 @@ test('nc server constructor - dont pass any param', function(assert) {
   }
 });
 
-test('nc server constructor - pass only port & options', function(assert) {
-  assert.plan(3);
+test('nc server constructor - pass only port & options', function(assert) { 
   server = Netcat.server(4000, {
     readEncoding: 'utf8',
     timeout: 3000
   });
+  
   assert.ok(server);
   server.listen();
+
   server.once('ready', function() { 
     assert.pass('server, ready'); 
     server.close(function() {
-      assert.pass('server closed');  
+      assert.pass('server closed');
+      assert.end();
     });
   });  
 });
 
+test('tx to a client has disconnected', function(assert) {
+  var clients;
+  server = Netcat.server(4000);
+  client = Netcat.client(4000);
+
+  assert.ok(server);
+  assert.ok(client);
+
+  server.listen();
+
+  server.once('ready', function() { 
+    assert.pass('server, ready');
+    client.start();
+  });
+
+  server.on('client_on', function(client) { 
+    assert.ok(client, 'server, client connect ' + client);
+    clients = server.getClients();
+    assert.equal(clients.length, 1);
+    assert.equal(clients[0], client); 
+  });
+
+  server.on('client_off', function(client) { 
+    assert.ok(client, 'server, client disconnet ' + client);
+  });
+
+  server.on('client_error', function(err, client, chunk) {
+    console.log(err, client, chunk);
+  });
+
+  server.once('error', assert.fail);
+  
+
+  server.once('close', function() {
+    assert.pass('server, closed');
+    assert.end();
+  });
+
+  client.once('open', function() {
+    assert.pass('client, ready');
+    client.close();
+    server.send(client, 'Hello World!', function() {
+       
+      //server.close();  
+    });
+  });
+});
+return;
+
 test('server & client using binary data', function(t) {
-  t.plan(13);
+  t.plan(15);
  
   server = Netcat.server(4000);
   client = Netcat.client(4000);
@@ -54,6 +105,21 @@ test('server & client using binary data', function(t) {
     var clients = server.getClients();
     t.ok(clients, 'server, exists ' + clients.length + ' client active');
 
+    // first send some messages without closing the conn
+    Object.keys(clients).forEach(function(client) {
+      server.send(clients[client], data, function() {
+        t.pass('server, send "' + data + '" to client ' + clients[client]);
+      });
+    });
+
+    // send empty data
+    Object.keys(clients).forEach(function(client) {
+      server.send(clients[client], '', function() {
+        t.pass('server, send "' + data + '" to client ' + clients[client]);
+      });
+    });
+
+    // now close the conn after tx the message
     Object.keys(clients).forEach(function(client) {
       server.send(clients[client], data, true, function() {
         t.pass('server, send "' + data + '" to client ' + clients[client]);
@@ -75,7 +141,6 @@ test('server & client using binary data', function(t) {
   server.once('close', function() { t.pass('server, closed'); });
   server.listen();
 
-
   // client
   client.once('open', function() { 
     t.pass('client, connected'); 
@@ -83,7 +148,7 @@ test('server & client using binary data', function(t) {
       client.send('Hello World', function() {
         t.pass('client, send message');
       });
-    }, 1000);
+    }, 100);
   });
 
   client.on('data', function(data) {
@@ -100,7 +165,7 @@ test('server & client using binary data', function(t) {
 });
 
 test('server & client using utf8 encoding', function(t) {
-  t.plan(13);
+  t.plan(15);
  
   server = Netcat.server(4000, {readEncoding: 'utf8'});
   client = Netcat.client(4000, {readEncoding: 'utf8'});
@@ -123,6 +188,20 @@ test('server & client using utf8 encoding', function(t) {
     var clients = server.getClients();
     t.ok(clients, 'server, exists ' + clients.length + ' client active');
 
+    // some something without passing the callback
+    Object.keys(clients).forEach(function(client) {
+      server.send(clients[client], data);
+      t.pass('server, send "' + data + '" to client ' + clients[client]);
+    });
+     
+    // first send some messages without closing the conn
+    Object.keys(clients).forEach(function(client) {
+      server.send(clients[client], data, function() {
+        t.pass('server, send "' + data + '" to client ' + clients[client]);
+      });
+    });
+
+    // now close the conn after tx the message
     Object.keys(clients).forEach(function(client) {
       server.send(clients[client], data, true, function() {
         t.pass('server, send "' + data + '" to client ' + clients[client]);
@@ -152,7 +231,7 @@ test('server & client using utf8 encoding', function(t) {
       client.send('Hello World', function() {
         t.pass('client, send message');
       });
-    }, 1000);
+    }, 100);
   });
 
   client.on('data', function(data) {

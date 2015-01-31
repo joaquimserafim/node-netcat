@@ -1,0 +1,7 @@
+node_modules/*
+test.*
+*.csv
+.DS_Store
+coverage/*
+*.html
+npm-debug.log
