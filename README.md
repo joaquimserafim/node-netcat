@@ -50,6 +50,9 @@
 #### start()
 client starts the connection
 
+#### close()
+close the connection
+
 #### send(message, [close_connection], [callback])
 send messages and can close the connection after send the message
 
@@ -102,32 +105,30 @@ return an array with all active clients
 
 ### UDP Client (-u)
 
-    Netcat.udpClient(port, host, [options])
-    
-    options = {
-	 // define a connection timeout
-		timeout: 60000,
-	 // buffer(default, to receive the original Buffer objects), ascii, hex,utf8, base64
-	  read_encoding: 'buffer''
-	 }
-    
-    events:
-		on('open', function ())
-		on('message', function (message, {port, address}, protocol_family))
-		on('error', function (err))
-		on('close', function ())
-        
-        // protocol_family - ipv4 | ipv6
+`Netcat.udpClient(port, host, [options])`
 
+*	**port** {int} required
+*	**host** {string} required
+*	**options**
+	*	**timeout** {int} define a connection timeout in miliseconds, default to 60000,
+	*	**read_encoding** {string} the read encoding, default to 'buffer', others values ascii, hex,utf8, base64
     
-    methods:
-        close()
-        start() // init client
-        send('message')
-     
-    "message" not pass a Buffer!!!
+#### events
+*	**open** callback()
+*	**message** callback(message, {port, address}, protocol_family*[ipv4 | ipv6]*)
+*	**error** callback(err)
+*	**close** callback()
+    
+#### start()
+init the client
+
+#### close()
+close the client
+
+#### send(message)
+send a message and the message should not be a Buffer
  
-#####  *A Note about UDP datagram size
+### A Note about UDP datagram size
 
 > The maximum size of an IPv4/v6 datagram depends on the MTU (Maximum Transmission Unit) and on the Payload Length field size.
 > 
@@ -142,136 +143,171 @@ return an array with all active clients
 
 ### UDP Server (-u -k -l)
 
-    Netcat.udpServer(port, host, [options])
-    
-    options = {
-	 // define a connection timeout
-		timeout: 60000,
-	 // buffer(default, to receive the original Buffer objects), ascii, hex,utf8, base64
-	  read_encoding: 'buffer''
-	 }
+`Netcat.udpServer(port, host, [options])`
 
-    methods:
-        close()
-        bind() // binding to a port
+*	**port** {int} required
+*	**host** {string} required
+*	**options**
+	*	**timeout** {int} define a connection timeout in miliseconds, default to 60000,
+	*	**read_encoding** {string} the read encoding, default to 'buffer', others values ascii, hex,utf8, base64
 
+#### bind()
+binding to a port
 
-    events:
-		on('ready', function ())
-		on('data', function (client, data, protocol family))
-		on('error', function (err))
-		on('close', function ())
+#### close()
+
+#### events
+*	**ready** callback() - server it's ready
+*	**data** callback(data)
+*	**error** callback(err)
+*	**close** callback()
 		
 					
 ### PortScan (-z [port_start-port_end])
-	
-	scan.run(host, ports*, cb)
-	
-	* a single port 80 or between various ports 22-80
-	
+
+#### scan.run(host, ports*, callback)
+*	**host** {string}
+*	**ports** {int | expression} a single port 80 or between various ports for example: 22-80
+*	**callback** {function}
 
 
 ## Examples
 
 ### Client
 
-	var Netcat = require('node-netcat');
+```javascript
+var NetcatClient = require('node-netcat').client;
+var client = NetcatClient(5000, 'localhost');
 	
-	var client = Netcat.client(5000, 'localhost');
-	
-	client.on('open', function () {
-	  console.log('connect');
-	  client.send('this is a test' + '\n');
-	});
-	
-	client.on('data', function (data) {
-	  console.log(data.toString('ascii'));
-	  client.send('Goodbye!!!', true);
-	});
-	
-	client.on('error', function (err) {
-	  console.log(err);
-	});
-	
-	client.on('close', function () {
-	  console.log('close');
-	});
+client.on('open', function () {
+	console.log('connect');
+	client.send('this is a test' + '\n');
+});
 
-	client.start();
+client.on('data', function (data) {
+  console.log(data.toString('ascii'));
+  client.send('Goodbye!!!', true);
+});
+
+client.on('error', function (err) {
+  console.log(err);
+});
+
+client.on('close', function () {
+  console.log('close');
+});
+
+client.start();
+```
 
 ### Server
 
-	var Netcat = require('node-netcat');
-	
-	var server = Netcat.server(5000);
-	
-	
-	server.on('ready', function () { console.log('server ready'); });
-	server.on('data', function (client, data) { console.log('server rx: ' + data + ' from ' + client); });
-	server.on('client_on', function (client) { console.log('client on ', client); });
-	server.on('client_of', function (client) { console.log('client off ', client); });
-	server.on('error', function (err) { console.log(err); });
-	server.on('close', function () { console.log('server closed'); });
+```javascript
+var NetcatServer = require('node-netcat').server;
+var server = NetcatServer(5000);
 
-	server.listen();// start to listening
-		
-	// get active clients
-	var clients = server.getClients();
-	
-	// send messages to clients	 and close the connection
-	for (var client in clients) {
-      server.send(clients[client], 'received ' + data, true);
-    }
+server.on('ready', function() {
+	console.log('server ready');
+});
 
-	// or a normal message	
-	server.send(client, 'message');
+server.on('data', function(client, data) {
+	console.log('server rx: ' + data + ' from ' + client);
+});
+
+server.on('client_on', function(client) {
+	console.log('client on ', client);
+});
+
+server.on('client_of', function(client) {
+	console.log('client off ', client);
+});
+
+server.on('error', function(err) {
+	console.log(err);
+});
+
+server.on('close', function() {
+	console.log('server closed');
+});
+
+server.listen();// start to listening
 	
+// get active clients
+var clients = server.getClients();
+
+// send messages to clients	 and close the connection
+Object.keys(clients).forEach(function(client) {
+	server.send(clients[client], 'received ' + data, true);
+});
+
+// or a normal message	
+server.send(client, 'message');
+```
 
 ### UDP Client
 
-    var client = Netcat.udpClient(5000, '127.0.0.1');
-    
-    client.on('open', function () {  console.log('open'); });
-    
-    client.once('error', function (err) {  console.error('err'); });
-    
-    client.once('close', function () { console.log('client, closed'); });
-    
-    clien.send('Hello World');
+```javascript
+var NetcatUdpClient = require('node-netcat').udpClient;
+var client = NetcatUdpClient(5000, '127.0.0.1');
 
+client.on('open', function() { 
+	console.log('open');
+});
+
+client.once('error', function(err) {
+	console.error('err');
+});
+
+client.once('close', function() {
+	console.log('client, closed');
+});
+
+clien.send('Hello World');
+```
 	
 ### UDP Server
 
-    var server = Netcat.udpServer(5000, '127.0.0.1');
-    
-    server.on('data', function (msg, client, protocol) {
-      console.log('rx: ' + msg + ', from ' + client);
-    });
+```javascript
+var NetcatUdpServer = require('node-netcat').udpServer;
+var server = NetcatUdpServer(5000, '127.0.0.1');
 
-    server.on('ready', function () { console.log('ready'); });
-      
-    server.once('error', function (err) { console.log(err); });
-    
-    server.once('close', function () { console.log('close'); });
-    
-    server.bind();
-    
-    
-    setTimeout(function () {
-      server.close();
-    }, 30000);
+server.on('data', function(msg, client, protocol) {
+  console.log('rx: ' + msg + ', from ' + client);
+});
 
+server.on('ready', function() {
+	console.log('ready');
+});
+
+server.once('error', function(err) {
+	console.log(err);
+});
+
+server.once('close', function() {
+	console.log('close');
+});
+
+server.bind();
+
+setTimeout(function () {
+  server.close();
+}, 30000);
+```
 
 
 ### PortScan
 
-	var Netcat = require('node-netcat');
+```javascript
+var scan = require('node-netcat').portscan();
 
-	var scan = Netcat.portscan();
-	
-	scan.run('google.com', '80-81', function (err, res) {
-		console.log(err, res);	
-	});
+scan.run('google.com', '80-81', function(err, res) {
+	if (err) {
+		// ERR
+	} else {
+		// RES
+	}
+});
+```
 
 
 ## Development

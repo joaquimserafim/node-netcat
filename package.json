@@ -1,14 +1,21 @@
 {
   "name": "node-netcat",
-  "version": "1.4.8",
+  "version": "1.5.8",
   "description": "nc/netcat - arbitrary TCP and UDP connections and listens in node.js",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/index.js",
-    "jshint": "jshint -c .jshintrc --exclude-path .gitignore .",
-    "codestyle": "jscs -p google lib/ test/",
-    "coverage": "istanbul cover ./node_modules/tape/bin/tape test"
+    "test": "istanbul cover tape test/*.js",
+    "jshint": "jshint -c .jshintrc lib/*.js test/*.js",
+    "code-style": "jscs -p google lib/*.js test/*.js",
+    "check-coverage": "istanbul check-coverage --statements 100 --functions 100 --lines 100 --branches 100",
+    "open-coverage": "open coverage/lcov-report/index.html"
   },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js",
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/joaquimserafim/node-netcat"
@@ -21,12 +28,22 @@
     "portscan"
   ],
   "author": "@joaquimserafim",
-  "license": "MIT",
+  "license": "ISC",
   "devDependencies": {
-    "tape": "~2.4.2"
+    "istanbul": "^0.3.5",
+    "jscs": "^1.10.0",
+    "jshint": "^2.6.0",
+    "pre-commit": "^1.0.1",
+    "tape": "^3.5.0"
   },
   "dependencies": {
-    "lasync": "~1.1.0",
+    "lasync": "^1.1.0",
     "underscore": "^1.7.0"
-  }
+  },
+  "pre-commit": [
+    "jshint",
+    "code-style",
+    "test",
+    "check-coverage"
+  ]
 }
