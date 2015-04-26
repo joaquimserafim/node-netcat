@@ -1,4 +1,5 @@
 'use strict';
+return;
 
 var test = require('tape');
 var Netcat = require('../');
@@ -16,22 +17,22 @@ test('nc server constructor - dont pass any param', function(assert) {
   }
 });
 
-test('nc server constructor - pass only port & options', function(assert) { 
+test('nc server constructor - pass only port & options', function(assert) {
   server = Netcat.server(4000, {
     readEncoding: 'utf8',
     timeout: 3000
   });
-  
+
   assert.ok(server);
   server.listen();
 
-  server.once('ready', function() { 
-    assert.pass('server, ready'); 
+  server.once('ready', function() {
+    assert.pass('server, ready');
     server.close(function() {
       assert.pass('server closed');
       assert.end();
     });
-  });  
+  });
 });
 
 test('tx to a client has disconnected', function(assert) {
@@ -44,19 +45,19 @@ test('tx to a client has disconnected', function(assert) {
 
   server.listen();
 
-  server.once('ready', function() { 
+  server.once('ready', function() {
     assert.pass('server, ready');
     client.start();
   });
 
-  server.on('client_on', function(client) { 
+  server.on('client_on', function(client) {
     assert.ok(client, 'server, client connect ' + client);
     clients = server.getClients();
     assert.equal(clients.length, 1);
-    assert.equal(clients[0], client); 
+    assert.equal(clients[0], client);
   });
 
-  server.on('client_off', function(client) { 
+  server.on('client_off', function(client) {
     assert.ok(client, 'server, client disconnet ' + client);
   });
 
@@ -65,7 +66,7 @@ test('tx to a client has disconnected', function(assert) {
   });
 
   server.once('error', assert.fail);
-  
+
 
   server.once('close', function() {
     assert.pass('server, closed');
@@ -76,8 +77,8 @@ test('tx to a client has disconnected', function(assert) {
     assert.pass('client, ready');
     client.close();
     server.send(client, 'Hello World!', function() {
-       
-      //server.close();  
+
+      //server.close();
     });
   });
 });
@@ -85,17 +86,17 @@ return;
 
 test('server & client using binary data', function(t) {
   t.plan(15);
- 
+
   server = Netcat.server(4000);
   client = Netcat.client(4000);
 
-  server.once('ready', function() { 
+  server.once('ready', function() {
     t.pass('server, ready');
     client.start();
   });
 
   server.on('data', function(client, data) {
-    t.equal(data.length > 0, 
+    t.equal(data.length > 0,
       true,
       'server, receive data: "' + data + '" from client ' + client);
 
@@ -131,12 +132,12 @@ test('server & client using binary data', function(t) {
     setTimeout(function() { server.close(); }, 1000);
   });
 
-  server.on('client_on', function(client) { 
-    t.ok(client, 'server, client connect ' + client); 
+  server.on('client_on', function(client) {
+    t.ok(client, 'server, client connect ' + client);
   });
 
-  server.on('client_off', function(client) { 
-    t.ok(client, 'server, client disconnet ' + client); 
+  server.on('client_off', function(client) {
+    t.ok(client, 'server, client disconnet ' + client);
   });
 
   server.once('error', function(err) { t.error(err !== null, err); });
@@ -144,8 +145,8 @@ test('server & client using binary data', function(t) {
   server.listen();
 
   // client
-  client.once('open', function() { 
-    t.pass('client, connected'); 
+  client.once('open', function() {
+    t.pass('client, connected');
     setTimeout(function () {
       client.send('Hello World', function() {
         t.pass('client, send message');
@@ -168,17 +169,17 @@ test('server & client using binary data', function(t) {
 
 test('server & client using utf8 encoding', function(t) {
   t.plan(15);
- 
+
   server = Netcat.server(4000, {readEncoding: 'utf8'});
   client = Netcat.client(4000, {readEncoding: 'utf8'});
 
-  server.once('ready', function() { 
+  server.once('ready', function() {
     t.pass('server, ready');
     client.start();
   });
 
   server.on('data', function(client, data) {
-    t.equal(data.length > 0, 
+    t.equal(data.length > 0,
       true,
       'server, receive data: "' + data + '" from client ' + client);
 
@@ -195,7 +196,7 @@ test('server & client using utf8 encoding', function(t) {
       server.send(clients[client], data);
       t.pass('server, send "' + data + '" to client ' + clients[client]);
     });
-     
+
     // first send some messages without closing the conn
     Object.keys(clients).forEach(function(client) {
       server.send(clients[client], data, function() {
@@ -213,12 +214,12 @@ test('server & client using utf8 encoding', function(t) {
     setTimeout(function() { server.close(); }, 1000);
   });
 
-  server.on('client_on', function(client) { 
-    t.ok(client, 'server, client connect ' + client); 
+  server.on('client_on', function(client) {
+    t.ok(client, 'server, client connect ' + client);
   });
 
-  server.on('client_off', function(client) { 
-    t.ok(client, 'server, client disconnet ' + client); 
+  server.on('client_off', function(client) {
+    t.ok(client, 'server, client disconnet ' + client);
   });
 
   server.once('error', function(err) { t.error(err !== null, err); });
@@ -227,8 +228,8 @@ test('server & client using utf8 encoding', function(t) {
 
 
   // client
-  client.once('open', function() { 
-    t.pass('client, connected'); 
+  client.once('open', function() {
+    t.pass('client, connected');
     setTimeout(function () {
       client.send('Hello World', function() {
         t.pass('client, send message');
@@ -259,7 +260,7 @@ test('portscan', function(t) {
     // will fail in port 81
     if (err) return t.ok(err, err);
 
-    t.ok(res, res);    
+    t.ok(res, res);
   });
 });
 
@@ -284,7 +285,7 @@ test('upd', function(t) {
       setTimeout(function() { client.close(); }, 1000);
     }, 1000);
   });
-  
+
   server.once('error', function(err) { t.error(err !== null, err); });
   server.once('close', function() { t.pass('server, closed'); });
   server.bind();

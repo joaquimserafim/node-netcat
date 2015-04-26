@@ -1,14 +1,14 @@
 {
   "name": "node-netcat",
-  "version": "1.5.8",
+  "version": "2.0.0-1",
   "description": "nc/netcat - arbitrary TCP and UDP connections and listens in node.js",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover tape test/*.js",
+    "test": "lab -v -c",
     "jshint": "jshint -c .jshintrc lib/*.js test/*.js",
     "code-style": "jscs -p google lib/*.js test/*.js",
-    "check-coverage": "istanbul check-coverage --statements 100 --functions 100 --lines 100 --branches 100",
-    "open-coverage": "open coverage/lcov-report/index.html"
+    "check-coverage": "lab -t 100 -r html -o coverage.html",
+    "open-coverage": "open coverage.html"
   },
   "files": [
     "LICENSE",
@@ -30,13 +30,16 @@
   "author": "@joaquimserafim",
   "license": "ISC",
   "devDependencies": {
-    "istanbul": "^0.3.5",
-    "jscs": "^1.10.0",
-    "jshint": "^2.6.0",
-    "pre-commit": "^1.0.1",
-    "tape": "^3.5.0"
+    "code": "^1.4.0",
+    "istanbul": "^0.3.13",
+    "jscs": "^1.12.0",
+    "jshint": "^2.7.0",
+    "lab": "^5.7.0",
+    "pre-commit": "^1.0.6",
+    "tape": "^4.0.0"
   },
   "dependencies": {
+    "is-js-object": "^1.0.0",
     "lasync": "^1.1.0",
     "underscore": "^1.7.0"
   },
